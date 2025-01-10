@@ -18,5 +18,5 @@ type IUserService interface {
 	DeleteUser(ctx context.Context, userID string) error
 	GetUser(ctx context.Context, userID string) (*uCOntr.GetUserRes, error)
 	UpdateUser(ctx context.Context, userID string, req *uCOntr.UpdateUserReq) (*uCOntr.UpdateUserRes, error)
-	GetAllUsers(ctx context.Context) (*uCOntr.GetAllUsersRes, error)
+	GetAllUsers(ctx context.Context) ([]uCOntr.GetUserRes, error)
 }
