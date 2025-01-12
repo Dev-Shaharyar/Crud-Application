@@ -40,11 +40,15 @@ func toUpdateUserRes(user *uAgg.User) *uCOntr.UpdateUserRes {
 		PhoneNumber: user.PhoneNumber,
 	}
 }
-
-func toGetAllUsers(u []uAgg.User) []uCOntr.GetUserRes {
-	users := make([]uCOntr.GetUserRes, len(u))
-	for _, user := range u {
-		users = append(users, *toGetUserRes(&user))
+func toGetAllUsers(users []uAgg.User) []uCOntr.GetUserRes {
+	var res []uCOntr.GetUserRes
+	for _, user := range users {
+		res = append(res, uCOntr.GetUserRes{
+			ID:          user.ID,
+			Name:        user.Name,
+			Email:       user.Email,
+			PhoneNumber: user.PhoneNumber,
+		})
 	}
-	return users
+	return res
 }
