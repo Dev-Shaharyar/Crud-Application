@@ -270,3 +270,73 @@ func TestMongoUserRepository_UpdateUser(t *testing.T) {
 		})
 	}
 }
+func TestMongoUserRepository_GetAllUser(t *testing.T) {
+	mt := mtest.New(t, mtest.NewOptions().ClientType(mtest.Mock))
+	type args struct {
+		ctx context.Context
+	}
+	uExpected1, _ := TestUserModelData.toAggregate()
+	uExpected2, _ := TestUserModelData2.toAggregate()
+	tests := []struct {
+		id         int
+		name       string
+		args       args
+		beforeTest func(mt *mtest.T)
+		want       []uAgg.User
+		wantErr    bool
+	}{
+		{
+			id:   1,
+			name: "Get all users - Success",
+			args: args{
+				ctx: context.Background(),
+			},
+			beforeTest: func(mt *mtest.T) {
+				first := mtest.CreateCursorResponse(1, "foo.bar", mtest.FirstBatch, bson.D{
+					{Key: "_id", Value: TestUserModelData.ID},
+					{Key: "name", Value: TestUserModelData.Name},
+					{Key: "email", Value: TestUserModelData.Email},
+					{Key: "phone_number", Value: TestUserModelData.PhoneNumber}})
+				getMore := mtest.CreateCursorResponse(1, "foo.bar", mtest.NextBatch, bson.D{
+					{Key: "_id", Value: TestUserModelData2.ID},
+					{Key: "name", Value: TestUserModelData2.Name},
+					{Key: "email", Value: TestUserModelData2.Email},
+					{Key: "phone_number", Value: TestUserModelData2.PhoneNumber}})
+				killCursors := mtest.CreateCursorResponse(0, "foo.bar", mtest.NextBatch)
+				mt.AddMockResponses(first, getMore, killCursors)
+			},
+			want:    []uAgg.User{*uExpected1, *uExpected2},
+			wantErr: false,
+		},
+		{
+			id:   2,
+			name: "Get all users - MongoDB error - Failure",
+			args: args{
+				ctx: context.Background(),
+			},
+			beforeTest: func(mt *mtest.T) {
+				mt.AddMockResponses(bson.D{{Key: "ok", Value: 0}})
+			},
+			want:    nil,
+			wantErr: true,
+		},
+	}
+	for _, tt := range tests {
+		mt.Run(tt.name, func(mt *mtest.T) {
+			r := &MongoUserRepository{
+				client: mt.Client,
+			}
+			if tt.beforeTest != nil {
+				tt.beforeTest(mt) // Configure mock behavior
+			}
+			got, err := r.GetAllUser(tt.args.ctx)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("ID %v GetAllUser() error = %v, wantErr %v", tt.id, err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("ID %v GetAllUser() got = %v, want = %v", tt.id, got, tt.want)
+			}
+		})
+	}
+}
