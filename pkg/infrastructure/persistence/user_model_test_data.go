@@ -6,3 +6,10 @@ var TestUserModelData = User{
 	Email:       "samar123@example.com",
 	PhoneNumber: 98765430000,
 }
+
+var TestUserModelData2 = User{
+	ID:          "4d53761b-cf9b-4c59-b4d1-70f597e52f29",
+	Name:        "alam",
+	Email:       "alam@gmail.com",
+	PhoneNumber: 7365725436,
+}
