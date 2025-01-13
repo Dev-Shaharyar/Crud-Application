@@ -13,6 +13,7 @@ import (
 	user2 "github.com/Crud-application/pkg/application/user"
 	"github.com/Crud-application/pkg/domain/persistence"
 	"github.com/Crud-application/pkg/infrastructure/persistence"
+	"github.com/google/uuid"
 	"github.com/google/wire"
 	"go.mongodb.org/mongo-driver/mongo"
 )
@@ -27,7 +28,8 @@ func provideUserRepository() *user.MongoUserRepository {
 
 func provideUserService() *user2.UserService {
 	mongoUserRepository := provideUserRepository()
-	userService := user2.NewUserService(mongoUserRepository)
+	uuidGenerator := provideUUIDGenerator()
+	userService := user2.NewUserService(mongoUserRepository, uuidGenerator)
 	return userService
 }
 
@@ -54,6 +56,12 @@ var userRepoSet = wire.NewSet(
 	provideUserRepository, wire.Bind(new(persistence.IUserRepository), new(*user.MongoUserRepository)),
 )
 
+func provideUUIDGenerator() user2.UUIDGenerator {
+	return func() string {
+		return uuid.New().String()
+	}
+}
+
 var userSvcSet = wire.NewSet(
-	provideUserService, wire.Bind(new(services.IUserService), new(*user2.UserService)),
+	provideUserService, wire.Bind(new(services.IUserService), new(*user2.UserService)), provideUUIDGenerator,
 )

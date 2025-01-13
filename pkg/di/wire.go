@@ -10,6 +10,7 @@ import (
 	uApp "github.com/Crud-application/pkg/application/user"
 	repoInter "github.com/Crud-application/pkg/domain/persistence"
 	uRepo "github.com/Crud-application/pkg/infrastructure/persistence"
+	"github.com/google/uuid"
 	"github.com/google/wire"
 	"go.mongodb.org/mongo-driver/mongo"
 )
@@ -29,10 +30,17 @@ var userRepoSet = wire.NewSet(
 	wire.Bind(new(repoInter.IUserRepository), new(*uRepo.MongoUserRepository)),
 )
 
+func provideUUIDGenerator() uApp.UUIDGenerator {
+	return func() string {
+		return uuid.New().String() // Using the uuid package
+	}
+}
+
 func provideUserService() *uApp.UserService {
 	wire.Build(
 		uApp.NewUserService,
 		userRepoSet, // Injects the user repository
+		provideUUIDGenerator,
 	)
 	return nil
 }
@@ -40,6 +48,7 @@ func provideUserService() *uApp.UserService {
 var userSvcSet = wire.NewSet(
 	provideUserService,
 	wire.Bind(new(svcInter.IUserService), new(*uApp.UserService)),
+	provideUUIDGenerator,
 )
 
 func provideUserHandler() *h.UserHandler {
