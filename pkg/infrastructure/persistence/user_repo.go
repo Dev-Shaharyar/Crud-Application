@@ -29,7 +29,7 @@ func (r *MongoUserRepository) userCollection(ctx context.Context) *mongo.Collect
 
 // AddUser adds a new user to the MongoDB collection
 func (r *MongoUserRepository) AddUser(ctx context.Context, user *uAgg.User) error {
-	u := newUserModel(user)
+	u := toUserModel(user)
 	// Insert the document
 	result, err := r.userCollection(ctx).InsertOne(ctx, u)
 	if err != nil {

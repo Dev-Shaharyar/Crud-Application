@@ -12,7 +12,7 @@ type User struct {
 	PhoneNumber int64  `json:"phone_number" bson:"phone_number"`
 }
 
-func newUserModel(ua *uAgg.User) *User {
+func toUserModel(ua *uAgg.User) *User {
 	u := &User{
 		ID:          ua.ID,
 		Name:        ua.Name,
@@ -30,3 +30,12 @@ func (ua *User) toAggregate() (*uAgg.User, error) {
 		PhoneNumber: ua.PhoneNumber,
 	}, nil
 }
+
+// func (ua *User) ToBsonD() bson.D {
+// 	return bson.D{
+// 		{Key: "_id", Value: ua.ID},
+// 		{Key: "name", Value: ua.Name},
+// 		{Key: "email", Value: ua.Email},
+// 		{Key: "phone_number", Value: ua.PhoneNumber},
+// 	}
+// }
