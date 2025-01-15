@@ -114,17 +114,17 @@ The API supports the following CRUD operations:
   }
   ```
 
-Response body:
+  Response body:
   ```json
-  {
-    "message": "User updated successfully",
-    "user": {
-        "id": "8db01167-747b-420b-bffb-99cb416f91ac",
-        "name": "alam12334",
-        "email": "alam@gmail.com",
-        "phone_number": 7365725436
-    }
-  }  
+    {
+        "message": "User updated successfully",
+        "user": {
+            "id": "8db01167-747b-420b-bffb-99cb416f91ac",
+            "name": "alam12334",
+            "email": "alam@gmail.com",
+            "phone_number": 7365725436
+        }
+    }  
     ```
 
 - **Delete a User**
