@@ -130,12 +130,12 @@ Set the URL = http://localhost:3010/api/
 
   `DELETE /users/{id}`
 
-Response body:
-  ```json
+    Response body:
+    ```json
     {
         "message": "User deleted successfully"
     }
-```
+    ```
 
 
 
