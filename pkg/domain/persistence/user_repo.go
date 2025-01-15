@@ -4,7 +4,7 @@ import (
 	"context"
 
 	useragg "github.com/Crud-application/pkg/domain/userAgg"
-	uPersist "github.com/Crud-application/pkg/infrastructure/persistence"
+	uPersist "github.com/Crud-application/pkg/infrastructure/persistence/user"
 )
 
 var _ IUserRepository = (*uPersist.MongoUserRepository)(nil)
