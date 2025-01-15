@@ -3,7 +3,6 @@
 ## Table of Contents
 
 - [Getting Started](#getting-started)
-- [Running the Application](#running-the-application)
 - [Testing the API](#Testing-the-API)
 - [Project Overview](#project-overview)
 
@@ -29,7 +28,7 @@ Follow these steps to get the project up and running on your local machine.
 
 
 3. **Run below commond:**
-```bash
+   ```bash
    cd go run main.go
    ```
 
@@ -49,7 +48,7 @@ To interact with the CRUD API endpoints, you can use tools like [Postman](https:
 
 The API supports the following CRUD operations:
     
-- **Set the URL = http://localhost:3010/api/
+Set the URL = http://localhost:3010/api/
 
 - **Create a User**
 
