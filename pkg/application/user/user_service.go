@@ -4,28 +4,32 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/google/uuid"
-
 	uCOntr "github.com/Crud-application/pkg/contracts/user"
 	uRepo "github.com/Crud-application/pkg/domain/persistence"
 )
 
 type UserService struct {
-	uRepo uRepo.IUserRepository
+	uRepo        uRepo.IUserRepository
+	generateUUID UUIDGenerator
 }
 
-func NewUserService(userRepo uRepo.IUserRepository) *UserService {
+func NewUserService(uRepo uRepo.IUserRepository, generateUUID UUIDGenerator) *UserService {
 	return &UserService{
-		uRepo: userRepo,
+		uRepo:        uRepo,
+		generateUUID: generateUUID,
 	}
 }
 
+type UUIDGenerator func() string
+
 func (us *UserService) CreateUser(ctx context.Context, req *uCOntr.CreateUserReq) (*uCOntr.CreateUserRes, error) {
-	userID := uuid.New().String()
+	userID := us.generateUUID()
+	//userID := uuid.New().String() //--> getting problem while mocking
 	fmt.Printf("hello")
 	// Create a new user
+	fmt.Println(userID)
 	newUser, err := fromCreateUserReq(userID, req)
-	fmt.Printf("hello")
+	//fmt.Printf("hello")
 	if err != nil {
 		return nil, fmt.Errorf("request validation failed: %v", err)
 	}
@@ -58,7 +62,6 @@ func (us *UserService) UpdateUser(ctx context.Context, userID string, req *uCOnt
 	if err != nil {
 		return nil, fmt.Errorf("user not found: %v", err)
 	}
-
 	// Update fields only if they are provided in the request
 	if req.Name != nil {
 		existingUser.Name = *req.Name
@@ -75,36 +78,14 @@ func (us *UserService) UpdateUser(ctx context.Context, userID string, req *uCOnt
 	if err != nil {
 		return nil, fmt.Errorf("failed to update user: %v", err)
 	}
-
-	// Prepare the response
-	// return &uCOntr.UpdateUserRes{
-	// 	ID:          existingUser.ID,
-	// 	Name:        existingUser.Name,
-	// 	Email:       existingUser.Email,
-	// 	PhoneNumber: existingUser.PhoneNumber,
-	// }, nil
-
 	return toUpdateUserRes(existingUser), nil
 }
 
-func (us *UserService) GetAllUsers(ctx context.Context) (*uCOntr.GetAllUsersRes, error) {
+func (us *UserService) GetAllUsers(ctx context.Context) ([]uCOntr.GetUserRes, error) {
 	// Get users
 	users, err := us.uRepo.GetAllUser(ctx)
 	if err != nil {
 		return nil, err
 	}
-
-	var res []uCOntr.User
-	for _, u := range users {
-		res = append(res, uCOntr.User{
-			ID:          u.ID,
-			Name:        u.Name,
-			Email:       u.Email,
-			PhoneNumber: u.PhoneNumber,
-		})
-	}
-
-	return &uCOntr.GetAllUsersRes{
-		Users: res,
-	}, nil
+	return toGetAllUsers(users), nil
 }
