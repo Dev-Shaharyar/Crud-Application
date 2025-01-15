@@ -31,6 +31,7 @@ Follow these steps to get the project up and running on your local machine.
 3. **Run below commond:**
 ```bash
    cd go run main.go
+   ```
 
 
 
