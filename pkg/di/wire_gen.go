@@ -12,7 +12,7 @@ import (
 	"github.com/Crud-application/pkg/application/services"
 	user2 "github.com/Crud-application/pkg/application/user"
 	"github.com/Crud-application/pkg/domain/persistence"
-	"github.com/Crud-application/pkg/infrastructure/persistence"
+	"github.com/Crud-application/pkg/infrastructure/persistence/user"
 	"github.com/google/uuid"
 	"github.com/google/wire"
 	"go.mongodb.org/mongo-driver/mongo"

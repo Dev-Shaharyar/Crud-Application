@@ -9,7 +9,7 @@ import (
 	svcInter "github.com/Crud-application/pkg/application/services"
 	uApp "github.com/Crud-application/pkg/application/user"
 	repoInter "github.com/Crud-application/pkg/domain/persistence"
-	uRepo "github.com/Crud-application/pkg/infrastructure/persistence"
+	uRepo "github.com/Crud-application/pkg/infrastructure/persistence/user"
 	"github.com/google/uuid"
 	"github.com/google/wire"
 	"go.mongodb.org/mongo-driver/mongo"
