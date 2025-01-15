@@ -97,7 +97,7 @@ func (uh *UserHandler) GetUsers(c *gin.Context) {
 
 	mapUsers := make([]map[string]interface{}, 0)
 
-	for _, user := range users.Users {
+	for _, user := range users {
 		mapUsers = append(mapUsers, map[string]interface{}{
 			"id":          user.ID,
 			"name":        user.Name,
