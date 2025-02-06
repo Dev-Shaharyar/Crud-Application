@@ -5,6 +5,7 @@ import (
 
 	"fmt"
 	"net/http"
+	"strings"
 
 	uService "github.com/Crud-application/pkg/application/services"
 	"github.com/Crud-application/pkg/contracts/user"
@@ -36,7 +37,10 @@ func (uh *UserHandler) CreateUser(c *gin.Context) {
 		})
 		return
 	}
+
 	fmt.Println("newUser", newUser)
+	//update email to lowercase
+	newUser.Email = strings.ToLower(newUser.Email)
 
 	user, err := uh.userSvc.CreateUser(c.Request.Context(), &newUser)
 	if err != nil {
