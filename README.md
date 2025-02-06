@@ -3,9 +3,10 @@
 ## Table of Contents
 
 - [Getting Started](#getting-started)
+- [Project Structure](#project-structure)
+- [Features](#features)
 - [Testing the API](#Testing-the-API)
 - [Project Overview](#project-overview)
-
 
 
 ## Getting Started
@@ -34,12 +35,73 @@ Follow these steps to get the project up and running on your local machine.
 
 
 
-### Running the Application
+## Project Structure
 
-Once the application is running, you can interact with the API by sending requests to the endpoints. The app runs on the  port `3010`.
+```
+.
+├── cmd/
+│   └── server/
+│       ├── router.go            # Defines routes for the server
+│       ├── server.go            # Server initialization and configuration
+│       └── user_routes.go       # Routes specific to user operations
+│   └── main.go                  # Entry point of the application
+│
+├──── db/
+│       └──connection.go        # MongoDB initialization
+├── pkg/
+│   └── api/
+│       └── handlers/
+│           ├── handlers.go      # Base handler logic
+│           └── user_handlers.go # Handlers for user operations (create, read, update, delete)
+│   └── application/
+│       └── user/
+│           ├── mapper.go        # Maps data between models and contract
+│           ├── user_service.go  # Business logic for user operations
+│           ├── user_service_test.go # Tests for user_service
+│           └── utils.go         # Utility functions for user module
+│   └── contract/
+│       └── user/
+│           ├── create_user.go   # Input/output for user creation
+│           ├── get_user.go      # Input/output for fetching user details
+│           ├── update_user.go   # Input/output for updating user details
+│           └── delete_user.go   # Input/output for deleting a user
+│   └── di/
+│       ├── wire.go                  # Dependency injection setup
+│       └── wire_gen.go              # Auto-generated dependency graph
+│   └──  domain/
+│           └── persistence/
+│                 └── mocks/
+│                    └── user_repo_mock.go # Mock repository for testing
+│                 └── user_repo.go          # Interface for user repository
+│           └── userAgg/
+│                  ├── user.go              # User domain object
+│                  └── user_data.go         # Data representation for the domain layer
+├── infrastructure/
+│   └── persistence/
+│       └── user/
+│           ├── user_model.go               # MongoDB models for user documents
+│           ├── user_repo.go                # Implementation of user repository
+│           ├── user_repo_test.go           # Tests for user_repo
+│           ├── user_model_test_data.go     # Tests for user data logic
+│           ├── utils.go
+│
+│
+├── README.md                    # Project description and documentation
+├── go.mod                       # Go module dependencies
+└── go.sum                       # Checksums for dependencies
+```
+
+## Features
+
+- **User Creation**: Allows creating new users by sending relevant data.
+- **User Retrieval**: Fetches user details using unique identifiers (e.g., user ID).
+- **User Update**: Allows updating existing user details.
+- **User Deletion**: Deletes a user from the database.
 
 
 ## Testing the API
+
+Once the application is running, you can interact with the API by sending requests to the endpoints. The app runs on the  port `3010`.
 
 To interact with the CRUD API endpoints, you can use tools like [Postman](https://www.postman.com/)
 
